@@ -9,6 +9,9 @@
 ![FRED API](https://img.shields.io/badge/FRED_API-004481?style=for-the-badge&logo=federalreserve&logoColor=white)
 ![Yahoo Finance](https://img.shields.io/badge/Yahoo_Finance-6001D2?style=for-the-badge&logo=yahoo&logoColor=white)
 
+<br/>
+
+[![Open in Streamlit](https://img.shields.io/badge/🚀_Ver_Dashboard_en_Vivo-Streamlit_Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://fed-sp500-analytics.streamlit.app)
 
 </div>
 
@@ -134,6 +137,18 @@ python -m streamlit run Introducción_ℹ️.py
 ```
 
 > ℹ️ **Nota sobre la carga inicial:** La primera vez que abras el dashboard, el pipeline descargará los datos históricos de más de 500 activos desde el año 2015. Esto puede demorar de 1 a 2 minutos. Luego de este paso, la caché local de 24 horas asegura cargas instantáneas.
+
+### ☁️ Despliegue en Streamlit Community Cloud
+
+Para publicar el dashboard en [Streamlit Community Cloud](https://share.streamlit.io):
+- **Repository:** `facuberon/Data_Analytics_Investment_Portfolio`
+- **Branch:** `master`
+- **Main file path:** `Introducción_ℹ️.py`
+- **Custom App URL:** `fed-sp500-analytics.streamlit.app`
+- **Secrets (`Advanced settings -> Secrets`):**
+  ```toml
+  FRED_API_KEY = "tu_api_key_aqui"
+  ```
 
 ---
 

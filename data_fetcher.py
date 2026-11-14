@@ -75,6 +75,14 @@ def _cache_is_fresh(path: Path) -> bool:
     return (time.time() - path.stat().st_mtime) < CACHE_TTL
 
 
+def _load_cached_csv(cache: Path) -> pd.DataFrame | None:
+    if not cache.exists():
+        return None
+    df = pd.read_csv(cache, index_col=0, parse_dates=True)
+    df.index.name = "date"
+    return df.sort_index()
+
+
 def _get_fred_api_key() -> str | None:
     """Busca FRED API key en secrets de Streamlit o variable de entorno."""
     try:
@@ -108,12 +116,15 @@ def load_fed_macro() -> pd.DataFrame:
     """Carga datos macro de la FED con cache de 24 h y descarga automatica."""
     cache = _cache_path("fed_macro")
     if _cache_is_fresh(cache):
-        macro = pd.read_csv(cache, index_col=0, parse_dates=True)
-        macro.index.name = "date"
-        return macro
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
 
     api_key = _get_fred_api_key()
     if not api_key:
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
         st.error(
             "⚠️ FRED_API_KEY no configurada. "
             "Agregala en `.streamlit/secrets.toml` o como variable de entorno."
@@ -122,9 +133,16 @@ def load_fed_macro() -> pd.DataFrame:
 
     try:
         macro = _fetch_fed_macro(api_key)
+        if macro.empty:
+            cached = _load_cached_csv(cache)
+            if cached is not None:
+                return cached
         macro.to_csv(cache)
         return macro
     except Exception as exc:
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
         st.error(f"Error al descargar datos de FRED: {exc}")
         st.stop()
 
@@ -194,16 +212,25 @@ def load_sp500_prices() -> pd.DataFrame:
     """Carga precios del S&P 500 con cache de 24 h."""
     cache = _cache_path("sp500_prices")
     if _cache_is_fresh(cache):
-        prices = pd.read_csv(cache, index_col=0, parse_dates=True)
-        prices.index.name = "date"
-        return prices.sort_index()
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
 
     try:
         tickers = _fetch_sp500_tickers()
         prices = _fetch_prices(tickers)
-        prices.to_csv(cache)
+        if prices.empty:
+            cached = _load_cached_csv(cache)
+            if cached is not None:
+                return cached
+            st.error("No se pudieron descargar precios del S&P 500.")
+            st.stop()
+        prices.to_csv(cache, float_format="%.4f")
         return prices
     except Exception as exc:
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
         st.error(f"Error al descargar precios del S&P 500: {exc}")
         st.stop()
 
@@ -213,14 +240,14 @@ def load_index_value() -> pd.DataFrame:
     """Genera el valor agregado del S&P 500 sumando precios de componentes."""
     cache = _cache_path("index_value")
     if _cache_is_fresh(cache):
-        value = pd.read_csv(cache, index_col=0, parse_dates=True)
-        value.index.name = "date"
-        return value.sort_index()
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
 
     prices = load_sp500_prices()
     total = prices.sum(axis=1).rename("Total Value").to_frame()
     total.index.name = "date"
-    total.to_csv(cache)
+    total.to_csv(cache, float_format="%.4f")
     return total.sort_index()
 
 
@@ -231,16 +258,25 @@ def load_alternative_assets() -> pd.DataFrame:
     """Descarga precios de commodities (futuros + ETFs) y crypto."""
     cache = _cache_path("alternative_assets")
     if _cache_is_fresh(cache):
-        prices = pd.read_csv(cache, index_col=0, parse_dates=True)
-        prices.index.name = "date"
-        return prices.sort_index()
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
 
     try:
         tickers = list(ALTERNATIVE_TICKERS.keys()) + TOP_20_TICKERS + ["^GSPC"]
         prices = _fetch_prices(tickers)
-        prices.to_csv(cache)
+        if prices.empty:
+            cached = _load_cached_csv(cache)
+            if cached is not None:
+                return cached
+            st.error("No se pudieron descargar precios de activos alternativos.")
+            st.stop()
+        prices.to_csv(cache, float_format="%.4f")
         return prices
     except Exception as exc:
+        cached = _load_cached_csv(cache)
+        if cached is not None:
+            return cached
         st.error(f"Error al descargar activos alternativos: {exc}")
         st.stop()
 
