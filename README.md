@@ -11,16 +11,13 @@
 
 <br/>
 
-[![Open in Streamlit](https://img.shields.io/badge/🚀_Ver_Dashboard_en_Vivo-Streamlit_Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://fed-sp500-analytics.streamlit.app)
+[![Open in Streamlit](https://img.shields.io/badge/🚀_Ver_Dashboard_en_Vivo-Streamlit_Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://data-analytics-investmentportfolio.streamlit.app/)
 
 </div>
 
-
-
-
-
-
 Un proyecto de **Data Analytics** y **Visualización Financiera** avanzado que estudia el impacto de la política monetaria de la Reserva Federal (FED) en el mercado accionario estadounidense (S&P 500) y diseña una **cartera de inversión diversificada y automatizada** con baja exposición a las decisiones del banco central.
+
+> 🌐 **Explora el Dashboard en Vivo:** La aplicación ya está desplegada y lista para usar directamente desde el navegador sin necesidad de instalar nada 👉 **[Abrir App en Streamlit](https://data-analytics-investmentportfolio.streamlit.app/)**
 
 > 💼 **Orientación a Portfolio Profesional:** Este proyecto demuestra habilidades de extremo a extremo en la ingeniería de datos (APIs de FRED y Yahoo Finance), análisis cuantitativo de series temporales, diseño UX/UI interactivo en Streamlit y formulación de estrategias financieras basadas en datos reales.
 
@@ -98,57 +95,11 @@ Para dar respuesta a estas preguntas, el análisis integra y procesa de forma co
 
 ---
 
-## ⚙️ Configuración e Instalación Local
+## 🌐 Dashboard Interactivo en Vivo
 
-### 1. Obtener la FRED API Key
-Regístrate y solicita una API key gratuita en [FRED API Keys](https://fred.stlouisfed.org/docs/api/api_key.html).
+Puedes explorar todas las visualizaciones macroeconómicas, el análisis de regímenes y la comparativa de la cartera recomendada directamente en la aplicación publicada:
 
-### 2. Configurar las Credenciales
-Crea un archivo llamado `.streamlit/secrets.toml` en la raíz del proyecto:
-```toml
-FRED_API_KEY = "tu_api_key_aqui"
-```
-
-### 3. Instalación de Dependencias e Inicio
-**En MacOS / Linux:**
-```bash
-# Crear entorno virtual
-python -m venv .venv
-source .venv/bin/activate
-
-# Instalar requerimientos
-pip install -r requirements.txt
-
-# Ejecutar aplicación
-python -m streamlit run Introducción_ℹ️.py
-```
-
-**En Windows (PowerShell):**
-```powershell
-# Crear entorno virtual
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-
-# Instalar requerimientos
-pip install -r requirements.txt
-
-# Ejecutar aplicación
-python -m streamlit run Introducción_ℹ️.py
-```
-
-> ℹ️ **Nota sobre la carga inicial:** La primera vez que abras el dashboard, el pipeline descargará los datos históricos de más de 500 activos desde el año 2015. Esto puede demorar de 1 a 2 minutos. Luego de este paso, la caché local de 24 horas asegura cargas instantáneas.
-
-### ☁️ Despliegue en Streamlit Community Cloud
-
-Para publicar el dashboard en [Streamlit Community Cloud](https://share.streamlit.io):
-- **Repository:** `facuberon/Data_Analytics_Investment_Portfolio`
-- **Branch:** `master`
-- **Main file path:** `Introducción_ℹ️.py`
-- **Custom App URL:** `fed-sp500-analytics.streamlit.app`
-- **Secrets (`Advanced settings -> Secrets`):**
-  ```toml
-  FRED_API_KEY = "tu_api_key_aqui"
-  ```
+👉 **[https://data-analytics-investmentportfolio.streamlit.app/](https://data-analytics-investmentportfolio.streamlit.app/)**
 
 ---
 
